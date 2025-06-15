@@ -9,8 +9,9 @@ PASSPATTERN := machine $(SERVER) password
 USER ?= $(shell awk '$(USERFIELDS) == "$(USERPATTERN)" {print $$4}' $(NETRC))
 PASS ?= $(shell awk '$(PASSFIELDS) == "$(PASSPATTERN)" {print $$6}' $(NETRC))
 PLAINAUTH := $(shell echo -ne "\0$(USER)\0$(PASS)" | base64)
-TLSINIT := EHLO me\nAUTH PLAIN $(PLAINAUTH)\n
-S_CLIENT := openssl s_client -ign_eof -crlf
+TLSINIT := EHLO me\r\n
+TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
+S_CLIENT := openssl s_client -ign_eof
 TLSCONNECT := $(S_CLIENT) -starttls smtp -connect $(SERVER):587
 SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
 ifneq ($(SHOWENV),)
@@ -19,7 +20,7 @@ else
  export
 endif
 tlstest:
-	echo -ne $(TLSINIT) | $(TLSCONNECT)
+	echo -ne '$(TLSINIT)$(TLSAUTH)' | $(TLSCONNECT)
 env:
 ifneq ($(SHOWENV),)
 	$@
