@@ -6,10 +6,8 @@ USERFIELDS := $$1 " " $$2 " " $$3
 PASSFIELDS := $$1 " " $$2 " " $$5
 USERPATTERN := machine $(SERVER) login
 PASSPATTERN := machine $(SERVER) password
-USER ?= \
- $(shell awk '$$1 " " $$2 " " $$3 == "$(USERPATTERN)" {print $$4}' $(NETRC))
-PASS ?= \
- $(shell awk '$$1 " " $$2 " " $$5 == "$(PASSPATTERN)" {print $$6}' $(NETRC))
+USER ?= $(shell awk '$(USERFIELDS) == "$(USERPATTERN)" {print $$4}' $(NETRC))
+PASS ?= $(shell awk '$(PASSFIELDS) == "$(PASSPATTERN)" {print $$6}' $(NETRC))
 PLAINAUTH := $(shell echo -ne "\0$(USER)\0$(PASS)" | base64)
 ifneq ($(SHOWENV),)
  export nothing
