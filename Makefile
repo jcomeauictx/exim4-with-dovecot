@@ -1,6 +1,8 @@
 # https://www.stevenrombauts.be/2018/12/test-smtp-with-telnet-or-openssl/
 SHELL := /bin/bash
-PACKAGES := dovecot-core dovecot-imapd dovecot-pop3d dovecot-sieve
+DOVE_PACKAGES := dovecot-core dovecot-imapd dovecot-pop3d dovecot-sieve
+EXIM_PACKAGES := exim4-base exim4-config exim4-daemon-heavy
+PACKAGES := $(DOVE_PACKAGES) $(EXIM_PACKAGES)
 SERVER ?= smarthost
 NETRC := $(HOME)/.netrc
 USERFIELDS := $$1 " " $$2 " " $$3
