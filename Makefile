@@ -1,5 +1,6 @@
 # https://www.stevenrombauts.be/2018/12/test-smtp-with-telnet-or-openssl/
 SHELL := /bin/bash
+PACKAGES := dovecot-core dovecot-imapd dovecot-pop3d dovecot-sieve
 SERVER ?= smarthost
 NETRC := $(HOME)/.netrc
 USERFIELDS := $$1 " " $$2 " " $$3
@@ -30,3 +31,6 @@ ifneq ($(SHOWENV),)
 else
 	$(MAKE) SHOWENV=1 $@
 endif
+install:
+	sudo apt update
+	sudo apt install $(PACKAGES)
