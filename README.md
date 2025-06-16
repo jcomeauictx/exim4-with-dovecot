@@ -86,6 +86,9 @@ And it shows "Private-Key: (256 bit)", the "priv" and "pub" data, then
 what to do with it, and I don't know enough to convert it to something that
 might work.
 
+`openssl pkcs8 -nocrypt -in /etc/exim4/certbot_cert_privkey.pem` also "works",
+as in no errors, but it merely outputs the same as the input.
+
 ## resources
 * [Debian Exim4 configuration](https://wiki.debian.org/Exim)
 * <https://doc.dovecot.org/configuration_manual/howto/exim_and_dovecot_sasl/>,
