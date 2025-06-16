@@ -64,12 +64,27 @@ diff exim4-20250615.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
 > CFILEMODE='644'
 ```
 
-Make sure to `chown Debian-exim /etc/exim4/exim.{crt,key}`, then:
+Make sure to `chgrp Debian-exim /etc/exim4/exim.{crt,key}`, then:
 
 ```
 systemctl restart dovecot
 systemctl restart exim4
 ```
+
+If you want to use letsencrypt certs instead of exim.{crt,key}, you have
+to copy the "privkey" and "fullchain" files from the
+/etc/letsencrypt/live/$CERTNAME/ folder into /etc/exim4, and also `chgrp`
+them to the `Debian-exim` group name.
+
+However, I (jc@unternet.net) still cannot get them to work. The privkeys are
+an odd format, the only way I can dump them with openssl is to use:
+```
+openssl pkey -in /etc/exim4/certbot_cert_privkey.pem -noout -text
+```
+And it shows "Private-Key: (256 bit)", the "priv" and "pub" data, then
+"ASN1 OID: prime256v1" and "NIST CURVE: P-256". Exim doesn't seem to know
+what to do with it, and I don't know enough to convert it to something that
+might work.
 
 ## resources
 * [Debian Exim4 configuration](https://wiki.debian.org/Exim)
@@ -79,3 +94,4 @@ systemctl restart exim4
 * <https://www.stevenrombauts.be/2018/12/test-smtp-with-telnet-or-openssl/>
 * <https://www.transip.eu/knowledgebase/entry/3012-installing-configuring-dovecot-ubuntu-debian/>
 * <https://serverfault.com/questions/313357/test-a-pop3-secure-ssl-port-995>
+* (Possible reason why letsencrypt certificate/key not recognized (Base64 decoding error.): need to remove passphrase?)[https://blog.differentpla.net/blog/2007/07/17/gnu-tls-reports-base64-decoding-error/] (nope, that wasn't it.)
