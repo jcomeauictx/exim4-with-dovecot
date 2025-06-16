@@ -89,6 +89,14 @@ might work.
 `openssl pkcs8 -nocrypt -in /etc/exim4/certbot_cert_privkey.pem` also "works",
 as in no errors, but it merely outputs the same as the input.
 
+Anyway, assuming you can find a way to solve the problem, add
+```
+MAIN_TLS_CERTKEY=/etc/exim4/certbot_cert_privkey.pem
+MAIN_TLS_CERTIFICATE=/etc/exim4/certbot_cert_fullchain.pem
+```
+to `/etc/exim4/exim4.conf.localmacros`, creating the file if it doesn't
+already exist. `MAIN_TLS_ENABLE=yes` should already be in there somewhere.
+
 ## resources
 * [Debian Exim4 configuration](https://wiki.debian.org/Exim)
 * <https://doc.dovecot.org/configuration_manual/howto/exim_and_dovecot_sasl/>,
