@@ -20,6 +20,15 @@ TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
+TESTMAIL := MAIL FROM: $(USER)@localhost\r\n
+TESTMAIL += RCPT TO: $(USER)@localhost\r\n
+TESTMAIL += DATA\r\n
+TESTMAIL += From: $(USER)@localhost\r\n
+TESTMAIL += To: $(USER)@localhost\r\n
+TESTMAIL += Subject: test message\r\n
+TESTMAIL += \r\n
+TESTMAIL += This is a test. It is only a test.\r\n
+TESTMAIL += .\r\n
 TLSCONNECT := $(S_CLIENT) -starttls smtp -connect $(SERVER):587
 SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
 ifneq ($(SHOWENV),)
@@ -28,7 +37,7 @@ else
  export
 endif
 tlstest:
-	echo -ne '$(TLSINIT)$(TLSAUTH)' | $(TLSCONNECT)
+	echo -ne '$(TLSINIT)$(TLSAUTH)$(TESTMAIL)' | $(TLSCONNECT)
 ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)' | $(TLSCONNECT)
 auth:
