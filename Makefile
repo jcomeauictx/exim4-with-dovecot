@@ -42,6 +42,8 @@ ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)' | $(TLSCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
+testmail:
+	@echo -n -e $(TESTMAIL)
 env:
 ifneq ($(SHOWENV),)
 	$@
