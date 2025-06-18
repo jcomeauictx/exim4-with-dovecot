@@ -46,8 +46,7 @@ endif
 tlstest: $(HOME)/.netrc @$(ENTRY)@
 	echo -ne '$(TLSINIT)$(TLSAUTH)$(TESTMAIL)$(QUIT)' | $(TLSCONNECT)
 ssltest:
-	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT) || \
-	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(TLSCONNECT)
+	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
