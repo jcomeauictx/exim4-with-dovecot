@@ -28,7 +28,10 @@ Only in exim4/: dkimprivkey.pem
 Only in exim4/: dkimpubkey.pem
 Only in exim4/: exim4.conf.localmacros
 diff -r exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
-2090,2097c2090,2106
+51a52,53
+> # Make some ports enforce SSL on connect:
+> tls_on_connect_ports = 465
+2090,2097c2092,2108
 < # dovecot_plain_server:
 < #   driver = dovecot
 < #   public_name = PLAIN
