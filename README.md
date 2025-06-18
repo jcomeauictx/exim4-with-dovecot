@@ -21,15 +21,14 @@ diff -r dovecot-20250614.orig/conf.d/10-master.conf dovecot/conf.d/10-master.con
 
 Then the exim4 configuration:
 ```
-# diff exim4-20250615.orig/ exim4/
+root@smarthost /etc # diff -r exim4-20250615.orig/ exim4/
 Only in exim4/: certbot_cert_fullchain.pem
 Only in exim4/: certbot_cert_privkey.pem
-Common subdirectories: exim4-20250615.orig/conf.d and exim4/conf.d
 Only in exim4/: dkimprivkey.pem
 Only in exim4/: dkimpubkey.pem
 Only in exim4/: exim4.conf.localmacros
-diff exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
-2090,2097c2090,2097
+diff -r exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
+2090,2097c2090,2106
 < # dovecot_plain_server:
 < #   driver = dovecot
 < #   public_name = PLAIN
@@ -47,21 +46,26 @@ diff exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
 >     .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
 >     server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
 >     .endif
+>
+>   dovecot_login_server:
+>     driver = dovecot
+>     public_name = LOGIN
+>     server_socket = /var/spool/exim4/dovecot.auth-client
+>     server_set_id = $auth1
+>     .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
+>     server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
+>     .endif
 Only in exim4/: exim.crt
 Only in exim4/: exim.key
-diff exim4-20250615.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
+diff -r exim4-20250615.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
 19,21c19,21
 < dc_eximconfig_configtype='local'
-< dc_other_hostnames='smarthost.example.net'
+< dc_other_hostnames='example.net'
 < dc_local_interfaces='127.0.0.1 ; ::1'
 ---
 > dc_eximconfig_configtype='internet'
-> dc_other_hostnames='static.1.2.3.4.example.com:smarthost.example.com:example.net'
+> dc_other_hostnames='static.1.2.3.4.example.com:example.net'
 > dc_local_interfaces='<; [0.0.0.0]:25; [0.0.0.0]:465; [0.0.0.0]:587; [::0]:25; [::0]:465; [::0]:587'
-27d26
-< CFILEMODE='644'
-31a31
-> CFILEMODE='644'
 ```
 
 Make sure to `chgrp Debian-exim /etc/exim4/exim.{crt,key}`, then:
