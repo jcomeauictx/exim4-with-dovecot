@@ -37,6 +37,7 @@ ENTRY := $(word 1, $(MUSER))
 endif
 TLSCONNECT := $(S_CLIENT) -starttls smtp -connect $(SERVER):587
 SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
+POPCONNECT := $(S_CLIENT) -connect $(SERVER):995
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
@@ -47,6 +48,8 @@ tlstest: $(HOME)/.netrc @$(ENTRY)@
 	echo -ne '$(TLSINIT)$(TLSAUTH)$(TESTMAIL)$(QUIT)' | $(TLSCONNECT)
 ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT)
+poptest:
+	echo -ne 'USER $(MUSER)\r\nPASS $(MPASS)\r\n' | $(POPCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
