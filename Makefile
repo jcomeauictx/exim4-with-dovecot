@@ -23,6 +23,7 @@ TLSINIT := EHLO me\r\n
 TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
+POPAUTH := USER $(MUSER)\r\nPASS $(MPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
 TESTMAIL := MAIL FROM: $(USER)@$(DOMAIN)\r\n
 TESTMAIL := $(TESTMAIL)RCPT TO: $(USER)@$(DOMAIN)\r\n
@@ -49,7 +50,7 @@ tlstest: $(HOME)/.netrc @$(ENTRY)@
 ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT)
 poptest:
-	echo -ne 'USER $(MUSER)\r\nPASS $(MPASS)\r\n' | $(POPCONNECT)
+	echo -ne '$(POPAUTH)' | $(POPCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
