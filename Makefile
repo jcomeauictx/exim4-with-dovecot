@@ -85,4 +85,4 @@ dovecot.diff:
 	ssh root@smarthost "cd /etc && diff -r dovecot.orig/ dovecot/"
 exim4.diff:
 	ssh root@smarthost "cd /etc && diff -r exim4.orig/ exim4/" | \
-	 sed 's/[a-z]\+\.\(com\|net\)/smarthost.example.com/'
+	 sed 's/\<[a-z0-9]\+\.\(com\|net\)/smarthost.example.com/'
