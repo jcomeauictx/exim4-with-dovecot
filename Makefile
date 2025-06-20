@@ -43,7 +43,7 @@ SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
 POPCONNECT := $(S_CLIENT) -connect $(SERVER):995
 IMAPCONNECT := $(S_CLIENT) -connect $(SERVER):993
 POPCHECK := LIST\r\nQUIT\r\n
-IMAPCHECK := LIST "" "*"\r\nLOGOUT\r\n
+IMAPCHECK := tag LIST "" "*"\r\ntag LOGOUT\r\n
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
