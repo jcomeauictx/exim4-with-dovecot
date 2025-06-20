@@ -98,5 +98,6 @@ test.diff:
 	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
 	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/"
 dovecot.patch: dovecot.diff
-	sed -e '/^root@smarthost .* dovecot/,/^```$$/!b' \
+	sed -e '/^root@smarthost .* dovecot/p' \
+	 -e '/^root@smarthost .* dovecot/,/^```$$/!b' \
 	 -e '/^```$$/!d;r $<' -e 'd' README.md
