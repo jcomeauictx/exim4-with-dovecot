@@ -47,8 +47,8 @@ IMAPCHECK := tag LIST "" "*"\r\ntag LOGOUT\r\n
 # sed patterns for sanitizing dc_other_hostnames
 PRE_HOSTNAMES_FROM = [<] dc_other_hostnames = '[^']\+'
 PRE_HOSTNAMES_TO = < dc_other_hostnames = 'smarthost.example.com'
-POST_HOSTNAMES_FROM = [<] dc_other_hostnames = '[^']\+'
-POST_HOSTNAMES_TO = < dc_other_hostnames = 'static.1.2.3.4.example.net;smarthost.example.com'
+POST_HOSTNAMES_FROM = [>] dc_other_hostnames = '[^']\+'
+POST_HOSTNAMES_TO = > dc_other_hostnames = 'static.1.2.3.4.example.net;smarthost.example.com'
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
