@@ -113,3 +113,4 @@ already exist. `MAIN_TLS_ENABLE=yes` should already be in there somewhere.
 * <https://www.transip.eu/knowledgebase/entry/3012-installing-configuring-dovecot-ubuntu-debian/>
 * <https://serverfault.com/questions/313357/test-a-pop3-secure-ssl-port-995>
 * (Possible reason why letsencrypt certificate/key not recognized (Base64 decoding error.): need to remove passphrase?)[https://blog.differentpla.net/blog/2007/07/17/gnu-tls-reports-base64-decoding-error/] (nope, that wasn't it.)
+* <https://www.linode.com/docs/guides/what-are-pop-and-imap/>

@@ -19,12 +19,13 @@ DOMAIN ?= $(shell awk '$(ACCTFIELDS) == "$(ACCTPATTERN)" {print $$8}' $(NETRC))
 PLAINAUTH := $(shell echo -ne "\0$(MUSER)\0$(MPASS)" | base64)
 LUSER := $(shell echo -ne "$(MUSER)" | base64)
 LPASS := $(shell echo -ne "$(MPASS)" | base64)
+IUSER := $(shell echo -ne "$(MUSER)@$(DOMAIN)" | base64)
 TLSINIT := EHLO me\r\n
 TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
 POPAUTH := USER $(MUSER)\r\nPASS $(MPASS)\r\n
-IMAPAUTH := LOGIN $(MUSER) $(MPASS)\r\n
+IMAPAUTH := tag AUTHENTICATE LOGIN\r\n$(IUSER)\r\n$(LPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
 TESTMAIL := MAIL FROM: $(USER)@$(DOMAIN)\r\n
 TESTMAIL := $(TESTMAIL)RCPT TO: $(USER)@$(DOMAIN)\r\n
