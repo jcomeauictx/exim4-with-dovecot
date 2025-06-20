@@ -3,8 +3,8 @@
 Modify the dovecot configuration as so:
 
 ```
-root@smarthost /etc # diff -r dovecot-20250614.orig/ dovecot
-diff -r dovecot-20250614.orig/conf.d/10-master.conf dovecot/conf.d/10-master.conf
+root@smarthost /etc # diff -r dovecot.orig/ dovecot
+diff -r dovecot.orig/conf.d/10-master.conf dovecot/conf.d/10-master.conf
 88a89,91
 > # doc.dovecot.org/2.3/configuration_manual/howto/exim_and_dovecot_sasl/
 > auth_mechanisms = plain login
@@ -21,13 +21,13 @@ diff -r dovecot-20250614.orig/conf.d/10-master.conf dovecot/conf.d/10-master.con
 
 Then the exim4 configuration:
 ```
-root@smarthost /etc # diff -r exim4-20250615.orig/ exim4/
+root@smarthost /etc # diff -r exim4.orig/ exim4/
 Only in exim4/: certbot_cert_fullchain.pem
 Only in exim4/: certbot_cert_privkey.pem
 Only in exim4/: dkimprivkey.pem
 Only in exim4/: dkimpubkey.pem
 Only in exim4/: exim4.conf.localmacros
-diff -r exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
+diff -r exim4.orig/exim4.conf.template exim4/exim4.conf.template
 51a52,53
 > # Make some ports enforce SSL on connect:
 > tls_on_connect_ports = 465
@@ -60,7 +60,7 @@ diff -r exim4-20250615.orig/exim4.conf.template exim4/exim4.conf.template
 >     .endif
 Only in exim4/: exim.crt
 Only in exim4/: exim.key
-diff -r exim4-20250615.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
+diff -r exim4.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
 19,21c19,21
 < dc_eximconfig_configtype='local'
 < dc_other_hostnames='example.net'
