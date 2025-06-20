@@ -41,6 +41,8 @@ TLSCONNECT := $(S_CLIENT) -starttls smtp -connect $(SERVER):587
 SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
 POPCONNECT := $(S_CLIENT) -connect $(SERVER):995
 IMAPCONNECT := $(S_CLIENT) -connect $(SERVER):993
+POPCHECK := LIST\r\nQUIT\r\n
+IMAPCHECK := LIST "" "*"\r\nLOGOUT\r\n
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
@@ -52,9 +54,9 @@ tlstest: $(HOME)/.netrc @$(ENTRY)@
 ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT)
 poptest:
-	echo -ne '$(POPAUTH)' | $(POPCONNECT)
+	echo -ne '$(POPAUTH)$(POPCHECK)' | $(POPCONNECT)
 imaptest:
-	echo -ne '$(IMAPAUTH)' | $(IMAPCONNECT)
+	echo -ne '$(IMAPAUTH)$(IMAPCHECK)' | $(IMAPCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
