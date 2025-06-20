@@ -3,7 +3,7 @@
 Modify the dovecot configuration as so:
 
 ```
-root@smarthost /etc # diff -r dovecot.orig/ dovecot
+root@smarthost /etc # diff -r dovecot.orig/ dovecot/
 diff -r dovecot.orig/conf.d/10-master.conf dovecot/conf.d/10-master.conf
 88a89,91
 > # doc.dovecot.org/2.3/configuration_manual/howto/exim_and_dovecot_sasl/
