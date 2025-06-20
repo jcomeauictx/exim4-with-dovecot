@@ -44,6 +44,11 @@ POPCONNECT := $(S_CLIENT) -connect $(SERVER):995
 IMAPCONNECT := $(S_CLIENT) -connect $(SERVER):993
 POPCHECK := LIST\r\nQUIT\r\n
 IMAPCHECK := tag LIST "" "*"\r\ntag LOGOUT\r\n
+# sed patterns for sanitizing dc_other_hostnames
+PRE_HOSTNAMES_FROM = [<] dc_other_hostnames = '[^']\+'
+PRE_HOSTNAMES_TO = < dc_other_hostnames = 'smarthost.example.com'
+POST_HOSTNAMES_FROM = [<] dc_other_hostnames = '[^']\+'
+POST_HOSTNAMES_TO = < dc_other_hostnames = 'static.1.2.3.4.example.net;smarthost.example.com'
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
@@ -85,4 +90,5 @@ dovecot.diff:
 	ssh root@smarthost "cd /etc && diff -r dovecot.orig/ dovecot/"
 exim4.diff:
 	ssh root@smarthost "cd /etc && diff -r exim4.orig/ exim4/" | \
-	 sed 's/\<[a-z0-9]\+\.\(com\|net\)/smarthost.example.com/'
+	 sed -e 's/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/' \
+	 -e 's/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/'
