@@ -90,5 +90,10 @@ dovecot.diff:
 	ssh root@smarthost "cd /etc && diff -r dovecot.orig/ dovecot/"
 exim4.diff:
 	ssh root@smarthost "cd /etc && diff -r exim4.orig/ exim4/" | \
-	 sed -e 's/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/' \
-	 -e 's/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/'
+	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
+	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/"
+test.diff:
+	@echo -ne "< dc_other_hostnames = 'xyz.example.net'\n" \
+	 "> dc_other_hostnames = 'static.1.2.3.4.example.com:xyz.example.net\n" | \
+	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
+	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/"
