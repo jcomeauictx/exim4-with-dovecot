@@ -98,6 +98,6 @@ test.diff:
 	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
 	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/"
 %.patch: %.diff
-	sed -e '/^root@smarthost .* $*/p' \
+	sed -i -e '/^root@smarthost .* $*/p' \
 	 -e '/^root@smarthost .* $*/,/^```$$/!b' \
 	 -e '/^```$$/!d;r $<' -e 'd' README.md
