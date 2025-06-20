@@ -25,7 +25,8 @@ TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
 POPAUTH := USER $(MUSER)\r\nPASS $(MPASS)\r\n
-IMAPAUTH := tag AUTHENTICATE LOGIN\r\n$(IUSER)\r\n$(LPASS)\r\n
+# IUSER (username@domain) failed, try MUSER instead
+IMAPAUTH := tag AUTHENTICATE LOGIN\r\n$(MUSER)\r\n$(LPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
 TESTMAIL := MAIL FROM: $(USER)@$(DOMAIN)\r\n
 TESTMAIL := $(TESTMAIL)RCPT TO: $(USER)@$(DOMAIN)\r\n
@@ -87,11 +88,11 @@ install:
 	sudo apt update
 	sudo apt install $(PACKAGES)
 dovecot.diff:
-	ssh root@smarthost "cd /etc && diff -r dovecot.orig/ dovecot/"
+	ssh root@smarthost "cd /etc && diff -r dovecot.orig/ dovecot/" > $@
 exim4.diff:
 	ssh root@smarthost "cd /etc && diff -r exim4.orig/ exim4/" | \
 	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
-	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/"
+	 -e "s/$(POST_HOSTNAMES_FROM)/$(POST_HOSTNAMES_TO)/" > $@
 test.diff:
 	@echo -ne "< dc_other_hostnames = 'xyz.example.net'\n> dc_other_hostnames = 'static.1.2.3.4.example.com:xyz.example.net'\n" | \
 	 sed -e "s/$(PRE_HOSTNAMES_FROM)/$(PRE_HOSTNAMES_TO)/" \
