@@ -24,6 +24,7 @@ TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
 POPAUTH := USER $(MUSER)\r\nPASS $(MPASS)\r\n
+IMAPAUTH := LOGIN $(MUSER) $(MPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
 TESTMAIL := MAIL FROM: $(USER)@$(DOMAIN)\r\n
 TESTMAIL := $(TESTMAIL)RCPT TO: $(USER)@$(DOMAIN)\r\n
@@ -39,6 +40,7 @@ endif
 TLSCONNECT := $(S_CLIENT) -starttls smtp -connect $(SERVER):587
 SSLCONNECT := $(S_CLIENT) -connect $(SERVER):465
 POPCONNECT := $(S_CLIENT) -connect $(SERVER):995
+IMAPCONNECT := $(S_CLIENT) -connect $(SERVER):993
 QUIT := QUIT\r\n
 ifneq ($(SHOWENV),)
  export nothing
@@ -51,6 +53,8 @@ ssltest:
 	echo -ne '$(SSLINIT)$(SSLAUTH)$(TESTMAIL)$(QUIT)' | $(SSLCONNECT)
 poptest:
 	echo -ne '$(POPAUTH)' | $(POPCONNECT)
+imaptest:
+	echo -ne '$(IMAPAUTH)' | $(IMAPCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
