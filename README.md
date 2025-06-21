@@ -8,16 +8,30 @@ diff -r dovecot.orig/conf.d/10-master.conf dovecot/conf.d/10-master.conf
 88a89,91
 > # doc.dovecot.org/2.3/configuration_manual/howto/exim_and_dovecot_sasl/
 > auth_mechanisms = plain login
->
+> 
 115a119,125
->
+> 
 >   # doc.dovecot.org/2.3/configuration_manual/howto/exim_and_dovecot_sasl/
 >   # BUT also see /etc/exim4/exim4.conf.template for corrections
 >   unix_listener /var/spool/exim4/dovecot.auth-client {
 >     mode = 0660
 >     group = Debian-exim
 >   }
-```
+diff -r dovecot.orig/conf.d/10-ssl.conf dovecot/conf.d/10-ssl.conf
+6c6
+< ssl = yes
+---
+> ssl = required
+18c18,19
+< ssl_server_cert_file = /etc/dovecot/private/dovecot.pem
+---
+> #ssl_server_cert_file = /etc/dovecot/private/dovecot.pem
+> ssl_server_cert_file = /etc/letsencrypt/live/certbot_cert/fullchain.pem
+20c21,22
+< ssl_server_key_file = /etc/dovecot/private/dovecot.key
+---
+> #ssl_server_key_file = /etc/dovecot/private/dovecot.key
+> ssl_server_key_file = /etc/letsencrypt/live/certbot_cert/privkey.pem
 
 Then the exim4 configuration:
 ```
@@ -49,7 +63,7 @@ diff -r exim4.orig/exim4.conf.template exim4/exim4.conf.template
 >     .ifndef AUTH_SERVER_ALLOW_NOTLS_PASSWORDS
 >     server_advertise_condition = ${if eq{$tls_in_cipher}{}{}{*}}
 >     .endif
->
+> 
 >   dovecot_login_server:
 >     driver = dovecot
 >     public_name = LOGIN
@@ -63,13 +77,12 @@ Only in exim4/: exim.key
 diff -r exim4.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
 19,21c19,21
 < dc_eximconfig_configtype='local'
-< dc_other_hostnames='example.net'
+< dc_other_hostnames='smarthost.example.com'
 < dc_local_interfaces='127.0.0.1 ; ::1'
 ---
 > dc_eximconfig_configtype='internet'
-> dc_other_hostnames='static.1.2.3.4.example.com:example.net'
+> dc_other_hostnames='static.1.2.3.4.example.net:smarthost.example.com'
 > dc_local_interfaces='<; [0.0.0.0]:25; [0.0.0.0]:465; [0.0.0.0]:587; [::0]:25; [::0]:465; [::0]:587'
-```
 
 Make sure to `chgrp Debian-exim /etc/exim4/exim.{crt,key}`, then:
 
