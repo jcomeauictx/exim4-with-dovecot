@@ -25,8 +25,9 @@ TLSAUTH := AUTH PLAIN $(PLAINAUTH)\r\n
 SSLINIT := EHLO me\r\n
 SSLAUTH := AUTH LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
 POPAUTH := USER $(MUSER)\r\nPASS $(MPASS)\r\n
-# IUSER (username@domain) failed, try MUSER instead
-IMAPAUTH := tag AUTHENTICATE LOGIN\r\n$(MUSER)\r\n$(LPASS)\r\n
+# if IUSER (username@domain) fails, try LUSER instead
+IMAPAUTH := tag AUTHENTICATE LOGIN\r\n$(LUSER)\r\n$(LPASS)\r\n
+IMAPAUTH2 := tag AUTHENTICATE LOGIN\r\n$(IUSER)\r\n$(LPASS)\r\n
 S_CLIENT := openssl s_client -ign_eof
 TESTMAIL := MAIL FROM: $(USER)@$(DOMAIN)\r\n
 TESTMAIL := $(TESTMAIL)RCPT TO: $(USER)@$(DOMAIN)\r\n
@@ -63,7 +64,8 @@ ssltest:
 poptest:
 	echo -ne '$(POPAUTH)$(POPCHECK)' | $(POPCONNECT)
 imaptest:
-	echo -ne '$(IMAPAUTH)$(IMAPCHECK)' | $(IMAPCONNECT)
+	echo -ne '$(IMAPAUTH)$(IMAPCHECK)' | $(IMAPCONNECT) || \
+	echo -ne '$(IMAPAUTH2)$(IMAPCHECK)' | $(IMAPCONNECT)
 auth:
 	echo username: $(MUSER) password: $(MPASS) auth: $(PLAINAUTH)
 testmail:
@@ -103,4 +105,6 @@ test.diff:
 	 -e '/^```$$/!d;r $<' -e 'd' README.md
 # bring README up to date with server config
 patch: dovecot.patch exim4.patch
+imaplog:
+	ssh root@smarthost 'grep $(MUSER) /var/log/syslog | tail'
 .FORCE:
