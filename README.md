@@ -32,6 +32,7 @@ diff -r dovecot.orig/conf.d/10-ssl.conf dovecot/conf.d/10-ssl.conf
 ---
 > #ssl_server_key_file = /etc/dovecot/private/dovecot.key
 > ssl_server_key_file = /etc/letsencrypt/live/certbot_cert/privkey.pem
+```
 
 Then the exim4 configuration:
 ```
@@ -83,6 +84,7 @@ diff -r exim4.orig/update-exim4.conf.conf exim4/update-exim4.conf.conf
 > dc_eximconfig_configtype='internet'
 > dc_other_hostnames='static.1.2.3.4.example.net:smarthost.example.com'
 > dc_local_interfaces='<; [0.0.0.0]:25; [0.0.0.0]:465; [0.0.0.0]:587; [::0]:25; [::0]:465; [::0]:587'
+```
 
 Make sure to `chgrp Debian-exim /etc/exim4/exim.{crt,key}`, then:
 
