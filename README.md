@@ -98,8 +98,15 @@ to copy the "privkey" and "fullchain" files from the
 /etc/letsencrypt/live/$CERTNAME/ folder into /etc/exim4, and also `chgrp`
 them to the `Debian-exim` group name.
 
-However, I (jc@unternet.net) still cannot get them to work. The privkeys are
-an odd format, the only way I can dump them with openssl is to use:
+However, I (jc@unternet.net) still cannot get them to work. When attempting
+to, I get the error:
+```
+2025-06-29 00:25:54 TLS error on connection from (mail.example.com)
+[98.97.96.951] (cert/key setup: cert=/etc/exim4/certbot_cert_privkey.pem
+key=/etc/exim4/certbot_cert_privkey.pem): Base64 decoding error.
+```
+The privkeys are an odd format, the only way I can dump them with openssl is
+to use:
 ```
 openssl pkey -in /etc/exim4/certbot_cert_privkey.pem -noout -text
 ```
@@ -118,6 +125,13 @@ MAIN_TLS_CERTIFICATE=/etc/exim4/certbot_cert_fullchain.pem
 ```
 to `/etc/exim4/exim4.conf.localmacros`, creating the file if it doesn't
 already exist. `MAIN_TLS_ENABLE=yes` should already be in there somewhere.
+
+[Update 2025-06-28]
+Turns out certbot version 2.0 changed to using ECDSA keys. Change them
+back to RSA using <https://eff-certbot.readthedocs.io/en/stable/using.html#changing-a-certificate-s-key-type>:
+```
+certbot renew --key-type rsa --cert-name example.com --force-renewal
+```
 
 ## resources
 * [Debian Exim4 configuration](https://wiki.debian.org/Exim)
