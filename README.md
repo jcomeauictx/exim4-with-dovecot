@@ -119,3 +119,18 @@ Then run `sudo update-exim4.conf`, and `sudo systemctl restart exim4`
   which were only caused by my use of the wrong exim4 macros; closer inspection
   of the exim4 mainlog showed that it was trying to use the privkey file for
   both cert and key.
+* for spam filtering, I added the following to
+  `/etc/exim4/exim4.conf.localmacros`, and they seem to work, but I don't
+  remember where I got all this from:
+  ```
+  # spam filtering
+  CHECK_RCPT_IP_DNSBLS=zen.spamhaus.org:bl.spamcop.net:cbl.abuseat.org
+  CHECK_RCPT_SPF=true
+  DKIM_DOMAIN=${lc:${domain:$h_from:}}
+  DKIM_FILE=/etc/exim4/dkimprivkey.pem
+  DKIM_SELECTOR=default
+  DKIM_CANON=relaxed
+  DKIM_PRIVATE_KEY=${if match_domain{DKIM_DOMAIN}{+local_domains}{DKIM_FILE}{0}}
+  ```
+  of course, you need to run `sudo update-exim4.conf` and
+  `sudo systemctl restart exim4` afterwards.
