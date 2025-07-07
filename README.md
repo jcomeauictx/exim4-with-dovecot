@@ -133,4 +133,6 @@ Then run `sudo update-exim4.conf`, and `sudo systemctl restart exim4`
   DKIM_PRIVATE_KEY=${if match_domain{DKIM_DOMAIN}{+local_domains}{DKIM_FILE}{0}}
   ```
   of course, you need to run `sudo update-exim4.conf` and
-  `sudo systemctl restart exim4` afterwards.
+  `sudo systemctl restart exim4` afterwards. and both SPF and DKIM require
+  changes to each DNS zone affected, but that's beyond the scope of this
+  project and you'll have to search for the info elsewhere.
